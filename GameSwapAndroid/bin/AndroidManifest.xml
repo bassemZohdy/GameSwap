@@ -30,6 +30,18 @@
             android:name="com.course.gameswap.IWantActivity"
             android:label="@string/title_activity_iwant" >
         </activity>
+        <activity
+            android:name="com.course.gameswap.AddWantActivity"
+            android:label="@string/title_activity_add_want"
+            android:parentActivityName="com.course.gameswap.IWantActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.course.gameswap.IWantActivity" />
+        </activity>
+        <activity
+            android:name="com.course.gameswap.AddHaveActivity"
+            android:label="@string/title_activity_add_have" >
+        </activity>
     </application>
 
 </manifest>

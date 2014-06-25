@@ -3,11 +3,14 @@
 
     <string name="app_name">Game Swap</string>
     <string name="hello_world">Hello world!</string>
+    <string name="add_have_label">Enter the game you would like to exchange:</string>
     <string name="title_activity_ihave">IHaveActivity</string>
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
     <string name="title_section3">Section 3</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_iwant">IWantActivity</string>
+    <string name="title_activity_add_want">AddWantActivity</string>
+    <string name="title_activity_add_have">AddHaveActivity</string>
 
 </resources>
