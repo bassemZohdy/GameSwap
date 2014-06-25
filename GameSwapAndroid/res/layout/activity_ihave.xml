@@ -8,7 +8,22 @@
   <TextView android:text="I have"
             android:padding="15dip"
             android:textSize="18dip"
+             android:id="@+id/haveLabel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
+
+    <Button
+      android:id="@+id/addWantButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:onClick="gotoAddHave"
+      android:text="Add CD" />
+  
+  <ListView android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+  
+
+
      
 </LinearLayout>
