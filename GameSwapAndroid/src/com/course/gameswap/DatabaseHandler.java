@@ -35,6 +35,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				+ " TEXT" + ")";
 		db.execSQL(CREATE_TABLE);
 		
+		CREATE_TABLE = "CREATE TABLE " + HAVE_TABLE_NAME + "(" + KEY_ID
+				+ " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PHONE
+				+ " TEXT" + ")";
+		db.execSQL(CREATE_TABLE);
+		
 		CREATE_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + "(" + KEY_ID
 				+ " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PHONE
 				+ " TEXT" + ")";
