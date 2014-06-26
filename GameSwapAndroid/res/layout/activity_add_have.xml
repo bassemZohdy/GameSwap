@@ -13,9 +13,18 @@
         android:layout_height="wrap_content"
         android:text="@string/add_have_label" />
     
-    <AutoCompleteTextView  
-    android:id="@+id/autocomplete_country"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content" />
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete_gameslist"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/addGameToHaveBtn" />
+
+    <Button
+        android:id="@+id/addGameToHaveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/autocomplete_gameslist"
+        android:layout_alignParentRight="true"
+        android:text="Add" />
 
 </RelativeLayout>

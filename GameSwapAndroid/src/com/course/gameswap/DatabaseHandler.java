@@ -19,7 +19,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	private final static String GAMES_TABLE_NAME = "games_tbl";
 	
 	private final static String KEY_ID = "id";
-	private final static String KEY_NAME = "name";
+	private final static String NAME_COLUMN = "name";
 	private final static String KEY_PHONE = "phone";
 
 	DatabaseHandler(Context context) {
@@ -31,17 +31,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		// TODO Auto-generated method stub
 		String CREATE_TABLE = "CREATE TABLE " + WANTED_TABLE_NAME + "(" + KEY_ID
-				+ " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PHONE
+				+ " INTEGER PRIMARY KEY," + NAME_COLUMN + " TEXT," + KEY_PHONE
 				+ " TEXT" + ")";
 		db.execSQL(CREATE_TABLE);
 		
 		CREATE_TABLE = "CREATE TABLE " + HAVE_TABLE_NAME + "(" + KEY_ID
-				+ " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PHONE
+				+ " INTEGER PRIMARY KEY," + NAME_COLUMN + " TEXT," + KEY_PHONE
 				+ " TEXT" + ")";
 		db.execSQL(CREATE_TABLE);
 		
 		CREATE_TABLE = "CREATE TABLE " + GAMES_TABLE_NAME + "(" + KEY_ID
-				+ " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT," + KEY_PHONE
+				+ " INTEGER PRIMARY KEY," + NAME_COLUMN + " TEXT," + KEY_PHONE
 				+ " TEXT" + ")";
 		db.execSQL(CREATE_TABLE);
 	}
@@ -55,22 +55,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	// add contact
-	public void addHaveGame(GameBean contacts) {
+	public void addHaveGame(GameBean game) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
-		ContentValues values = new ContentValues();
-		values.put(KEY_NAME, contacts.getName());
-		values.put(KEY_PHONE, contacts.getPhoneNumber());
+		if (game != null && !isGamedAlreadyAddedToHave(game.getName()) ){
+			ContentValues values = new ContentValues();
+			values.put(KEY_ID, game.getID());
+			values.put(NAME_COLUMN, game.getName());
+			values.put(KEY_PHONE, game.getPhoneNumber());
+	
+			db.insert(HAVE_TABLE_NAME, null, values);
+			db.close();
+		}
+	}
+	
+	public void addGame(GameBean game) {
+		SQLiteDatabase db = this.getWritableDatabase();
 
-		db.insert(HAVE_TABLE_NAME, null, values);
-		db.close();
+		if (game != null && !isGamedAlreadyAddedToGames(game.getID()) ){
+			ContentValues values = new ContentValues();
+			values.put(KEY_ID, game.getID());
+			values.put(NAME_COLUMN, game.getName());
+			values.put(KEY_PHONE, game.getPhoneNumber());
+	
+			db.insert(GAMES_TABLE_NAME, null, values);
+			db.close();
+		}
 	}
 
 	// get single contact
 	public GameBean getGame(int id) {
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(GAMES_TABLE_NAME, new String[] { KEY_ID, KEY_NAME,
+		Cursor cursor = db.query(GAMES_TABLE_NAME, new String[] { KEY_ID, NAME_COLUMN,
 				KEY_PHONE }, KEY_ID + "=?",
 				new String[] { String.valueOf(id) }, null, null, null, null);
 		if (cursor != null)
@@ -88,7 +105,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
-		values.put(KEY_NAME, contact.getName());
+		values.put(NAME_COLUMN, contact.getName());
 		values.put(KEY_PHONE, contact.getPhoneNumber());
 
 		return db.update(GAMES_TABLE_NAME, values, KEY_ID + " = ?",
@@ -166,6 +183,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	// get contacts count
+	public boolean isGamedAlreadyAddedToHave(String name) {
+		String countQuery = "SELECT * FROM " + HAVE_TABLE_NAME + " where name = '" + name + "'";
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Cursor cursor = db.rawQuery(countQuery, null);
+		if (cursor.moveToFirst())
+			return true;
+		
+		return false;
+	}
+	
+	public boolean isGamedAlreadyAddedToGames(int id) {
+		String countQuery = "SELECT * FROM " + GAMES_TABLE_NAME + " where id = " + id;
+		SQLiteDatabase db = this.getReadableDatabase();
+		
+		Cursor cursor = db.rawQuery(countQuery, null);
+		if (cursor.moveToFirst())
+			return true;
+		
+		return false;
+	}
+	
+
 	public int getGamesCount() {
 		String countQuery = "SELECT * FROM " + GAMES_TABLE_NAME;
 		SQLiteDatabase db = this.getReadableDatabase();

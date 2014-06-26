@@ -1,5 +1,6 @@
 package com.course.gameswap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -18,11 +19,28 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class IHaveActivity extends ListActivity {
+public class IHaveActivity extends Activity {
 	
-	private Button addWantButton;
+	private Button addHaveButton;
 	DatabaseHandler db;
 	List<GameBean> allHaveList;
+	
+	private void fillTestData(){
+		db.addGame(new GameBean(1, "Medal Of Honor", "2010"));
+		db.addGame(new GameBean(2, "GTA", "1"));
+		db.addGame(new GameBean(3, "Age of Empires", "2008"));
+		db.addGame(new GameBean(4, "Snake", "2000"));
+		db.addGame(new GameBean(5, "Call of duty", "2000"));
+		db.addGame(new GameBean(6, "Fifa 2014", "2000"));
+		db.addGame(new GameBean(7, "PES 2014", "2000"));
+		db.addGame(new GameBean(8, "PES 2013", "2000"));
+		db.addGame(new GameBean(9, "PES 2012", "2000"));
+		
+		db.addHaveGame(new GameBean(1, "Medal Of Honor", "2010"));
+		db.addHaveGame(new GameBean(2, "GTA", "1"));
+		db.addHaveGame(new GameBean(3, "Age of Empires", "2008"));
+		db.addHaveGame(new GameBean(4, "Snake", "2000"));
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +49,11 @@ public class IHaveActivity extends ListActivity {
 		
 		db = new DatabaseHandler(this);
 		
-		db.addHaveGame(new GameBean("Medal Of Honor", "2010"));
-		db.addHaveGame(new GameBean("GTA", "1"));
-		db.addHaveGame(new GameBean("Age of Empires", "2008"));
-		db.addHaveGame(new GameBean("Snake", "2000"));
+		fillTestData();
 		
-		addWantButton=(Button) findViewById(R.id.addWantButton);
+		addHaveButton=(Button) findViewById(R.id.addHaveButton);
 		
-		addWantButton.setOnClickListener(new OnClickListener() {
+		addHaveButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -49,17 +64,16 @@ public class IHaveActivity extends ListActivity {
 		
 		db = new DatabaseHandler(this);
 		allHaveList = db.getHaveGames();
-
-		String[] haveNames = new String[db.getHaveCount()];
-
+		ArrayList<String> haveNames = new ArrayList<String>();
+		
 		for (int x = 0; x < db.getHaveCount(); x++) {
-			haveNames[x] = allHaveList.get(x).getName();
-
+			haveNames.add(allHaveList.get(x).getName());
 		}
 
-		this.setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_ihave,	R.id.haveLabel, haveNames));
-		ListView lv = getListView();
-
+		ListView lv = (ListView)findViewById(android.R.id.list);
+//		ListView lv = getListView();
+		lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, haveNames));
+//		lv.setListAdapter(new ArrayAdapter<String>(this, R.layout.activity_ihave,	R.id.haveLabel, haveNames));
 		lv.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

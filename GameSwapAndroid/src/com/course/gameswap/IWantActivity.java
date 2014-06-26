@@ -18,7 +18,7 @@ public class IWantActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_iwant);
 		
-		addWantButton=(Button) findViewById(R.id.addWantButton);
+		addWantButton=(Button) findViewById(R.id.addHaveButton);
 		
 		addWantButton.setOnClickListener(new OnClickListener() {
 			

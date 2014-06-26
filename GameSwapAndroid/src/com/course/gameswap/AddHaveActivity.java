@@ -1,5 +1,8 @@
 package com.course.gameswap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -9,29 +12,57 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.Toast;
 import android.os.Build;
 
 public class AddHaveActivity extends Activity {
+	
+	DatabaseHandler db;
+	List<GameBean> allGamesList;
+	private Button addHaveButton;
+	private AutoCompleteTextView textView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_have);
 		
+		db = new DatabaseHandler(this);
+		allGamesList = db.getAllGames();
+		ArrayList<String> gamesNames = new ArrayList<String>();
+		
+		for (int x = 0; x < db.getGamesCount(); x++) {
+			gamesNames.add(allGamesList.get(x).getName());
+		}
+		
 		// Get a reference to the AutoCompleteTextView in the layout
-		AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_country);
-		// Get the string array
-		String[] games = new String[]{"Call of duty", "Fifa 2014", "PES 2014", "PES 2013", "PES 2012" };
-		// Create the adapter and set it to the AutoCompleteTextView 
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, games);
-		textView.setAdapter(adapter);
+		textView = (AutoCompleteTextView) findViewById(R.id.autocomplete_gameslist);
 
-//		if (savedInstanceState == null) {
-//			getFragmentManager().beginTransaction()
-//					.add(R.id.container, new PlaceholderFragment()).commit();
-//		}
+		// Create the adapter and set it to the AutoCompleteTextView 
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, gamesNames);
+		textView.setAdapter(adapter);
+		
+		addHaveButton=(Button) findViewById(R.id.addGameToHaveBtn);
+		
+		addHaveButton.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String gameEntered = textView.getText().toString();
+				//Toast.makeText(AddHaveActivity.this, gameEntered, Toast.LENGTH_LONG).show();
+				if ( db.isGamedAlreadyAddedToHave(gameEntered) )
+					Toast.makeText(AddHaveActivity.this, "Game already exist in your list", Toast.LENGTH_LONG).show();
+				else {
+					db.addHaveGame(new GameBean( db.getHaveCount(), gameEntered, "" ));
+					Toast.makeText(AddHaveActivity.this, "Game Added to your list", Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+
 	}
 
 	@Override
@@ -54,21 +85,5 @@ public class AddHaveActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-//	public static class PlaceholderFragment extends Fragment {
-//
-//		public PlaceholderFragment() {
-//		}
-//
-//		@Override
-//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//				Bundle savedInstanceState) {
-//			View rootView = inflater.inflate(R.layout.fragment_add_have,
-//					container, false);
-//			return rootView;
-//		}
-//	}
 
 }
